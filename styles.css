@@ -1,0 +1,217 @@
+/* ── xterm.js base styles ───────────────────────────────────── */
+
+.xterm { cursor: text; position: relative; user-select: none; -webkit-user-select: none; }
+.xterm.focus, .xterm:focus { outline: none; }
+.xterm .xterm-helpers { position: absolute; top: 0; z-index: 5; }
+.xterm .xterm-helper-textarea {
+  padding: 0; border: 0; margin: 0;
+  position: absolute; opacity: 0; left: -9999em; top: 0;
+  width: 0; height: 0; z-index: -5;
+  white-space: nowrap; overflow: hidden; resize: none;
+}
+.xterm .composition-view { background:#000; color:#FFF; display:none; position:absolute; white-space:nowrap; z-index:1; }
+.xterm .composition-view.active { display: block; }
+.xterm .xterm-viewport {
+  background-color: #1e1e2e;
+  overflow-y: scroll; cursor: default;
+  position: absolute; right: 0; left: 0; top: 0; bottom: 0;
+}
+.xterm .xterm-screen { position: relative; }
+.xterm .xterm-screen canvas { position: absolute; left: 0; top: 0; }
+.xterm .xterm-scroll-area { visibility: hidden; }
+.xterm-char-measure-element { display:inline-block; visibility:hidden; position:absolute; top:0; left:-9999em; line-height:normal; }
+.xterm.enable-mouse-events { cursor: default; }
+.xterm.xterm-cursor-pointer, .xterm .xterm-cursor-pointer { cursor: pointer; }
+.xterm .xterm-accessibility, .xterm .xterm-message {
+  position: absolute; left:0; top:0; bottom:0; right:0; z-index:10;
+  color: transparent; pointer-events: none;
+}
+.xterm .live-region { position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+.xterm .xterm-dim { opacity: 1; }
+.xterm-underline-1 { text-decoration: underline; }
+.xterm-underline-2 { text-decoration: double underline; }
+.xterm-underline-3 { text-decoration: wavy underline; }
+.xterm-underline-4 { text-decoration: dotted underline; }
+.xterm-underline-5 { text-decoration: dashed underline; }
+.xterm-overline { text-decoration: overline; }
+.xterm-strikethrough { text-decoration: line-through; }
+.xterm-screen .xterm-decoration-container .xterm-decoration { z-index:6; position:absolute; }
+.xterm-decoration-overview-ruler { z-index:8; position:absolute; top:0; right:0; pointer-events:none; }
+.xterm-decoration-top { z-index:2; position:relative; }
+
+/* ── Root ────────────────────────────────────────────────────── */
+
+.mt-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--background-secondary);
+  overflow: hidden;
+}
+
+/* ── Grid ────────────────────────────────────────────────────── */
+
+.mt-grid {
+  flex: 1;
+  display: grid;
+  padding: 3px;
+  background: var(--background-primary);
+  min-height: 0;
+  overflow: hidden;
+  position: relative;   /* anchor for fullscreen overlay */
+  /* grid-template-columns and grid-template-rows set inline via JS */
+  /* gaps are replaced by mt-gutter elements */
+}
+
+/* ── Resize gutters ──────────────────────────────────────────── */
+
+.mt-gutter {
+  background: var(--background-modifier-border);
+  transition: background 0.15s;
+  z-index: 5;
+  border-radius: 1px;
+}
+
+.mt-gutter-col { cursor: col-resize; }
+.mt-gutter-row { cursor: row-resize; }
+
+.mt-gutter:hover,
+.mt-gutter.mt-active {
+  background: var(--interactive-accent);
+}
+
+/* ── Pane ────────────────────────────────────────────────────── */
+
+.mt-pane {
+  display: flex;
+  flex-direction: column;
+  background: var(--background-primary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 5px;
+  overflow: hidden;
+  min-height: 0;
+  min-width: 0;
+  transition: border-color 0.12s;
+}
+
+.mt-pane.mt-focused {
+  border-color: var(--interactive-accent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--interactive-accent) 27%, transparent);
+}
+
+/* ── Fullscreen overlay ──────────────────────────────────────── */
+
+.mt-pane.mt-fullscreen {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  border-radius: 0;
+  border: none;
+}
+
+/* ── Drag-to-reorder feedback ────────────────────────────────── */
+
+.mt-pane.mt-dragging {
+  opacity: 0.45;
+}
+
+.mt-pane.mt-drag-over {
+  border-color: var(--interactive-accent);
+  background: color-mix(in srgb, var(--interactive-accent) 10%, var(--background-primary));
+}
+
+/* ── Pane header ─────────────────────────────────────────────── */
+
+.mt-pane-hdr {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 7px 3px 4px;
+  background: var(--background-secondary);
+  border-bottom: 1px solid var(--background-modifier-border);
+  flex-shrink: 0;
+  user-select: none;
+  cursor: grab;
+}
+
+.mt-pane-hdr:active { cursor: grabbing; }
+
+/* ── Grip icon ───────────────────────────────────────────────── */
+
+.mt-grip {
+  display: flex;
+  align-items: center;
+  color: var(--text-faint);
+  flex-shrink: 0;
+}
+
+.mt-grip svg { width: 10px; height: 10px; }
+
+/* ── Pane number badge ───────────────────────────────────────── */
+
+.mt-pane-num {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--interactive-accent);
+  background: var(--background-modifier-border);
+  border-radius: 3px;
+  padding: 1px 5px;
+  flex-shrink: 0;
+}
+
+/* ── Pane title (CWD / OSC title) ────────────────────────────── */
+
+.mt-pane-title {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1;
+}
+
+/* ── Restart button ──────────────────────────────────────────── */
+
+.mt-icon-btn {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  padding: 2px;
+  border-radius: 3px;
+  transition: color 0.1s, background 0.1s;
+  flex-shrink: 0;
+}
+.mt-icon-btn:hover { color: var(--text-normal); background: var(--background-modifier-hover); }
+.mt-icon-btn svg   { width: 11px; height: 11px; }
+
+/* ── xterm mount ─────────────────────────────────────────────── */
+
+.mt-xterm {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+.mt-xterm .xterm,
+.mt-xterm .xterm-viewport,
+.mt-xterm .xterm-screen {
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Error state ─────────────────────────────────────────────── */
+
+.mt-error {
+  color: var(--text-error);
+  padding: 20px;
+  font-family: monospace;
+}

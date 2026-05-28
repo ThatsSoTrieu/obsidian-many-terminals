@@ -1,0 +1,10 @@
+{
+  "id": "multi-terminal",
+  "name": "Multi-Terminal",
+  "version": "1.0.0",
+  "minAppVersion": "1.4.11",
+  "description": "Open up to 6 terminals in one window in a resizable, reorderable grid. Linux and macOS only.",
+  "author": "ThatsSoTrieu",
+  "authorUrl": "https://github.com/ThatsSoTrieu",
+  "isDesktopOnly": true
+}
