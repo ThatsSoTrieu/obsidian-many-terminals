@@ -1,4 +1,4 @@
-# Multi-Terminal
+# Many-Terminals
 
 An Obsidian plugin that opens up to 6 real terminals inside a single tab — all visible at once in a resizable, reorderable grid.
 
